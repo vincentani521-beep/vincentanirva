@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaNet - Mobile Community App</title>
+    <!-- Google Fonts for crisp sans-serif interface -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for the navigation icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-primary: #0071BC;
+            --brand-sky: #3FA9F5;
+            --bg-light: #CBE5FC; 
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #666666;
+            --status-active: #2A9D8F;
+            --btn-danger: #D90429;
+            --btn-teal: #2A9D8F;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #111111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Mobile Device Frame Container */
+        .phone-container {
+            width: 390px;
+            height: 844px;
+            background: #0B2545; /* Dark background under header */
+            border: 12px solid #2e2e2e;
+            border-radius: 48px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dynamic Island / Notch Mockup */
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 30px;
+            background: #000000;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 10;
+        }
+
+        /* Header Layout */
+        .app-header {
+            padding: 40px 20px 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0B2545;
+            color: #FFFFFF;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-logo {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--brand-sky), var(--brand-primary));
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(-45deg);
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Main Scrollable Canvas Area */
+        .main-content {
+            flex: 1;
+            background-color: var(--bg-light);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 90px; /* Spacer to prevent menu overlapping */
+        }
+
+        /* Section Banner Title */
+        .neighborhood-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* White Dashboard Container Card */
+        .data-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #EAEAEA;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .status-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .status-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--status-active);
+        }
+
+        /* Metric Rows layout */
+        .metric-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .chart-header-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 12px 0 15px 0;
+        }
+
+        /* Core Bar Chart Graphics */
+        .bar-chart-container {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .chart-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            position: absolute;
+            width: 100%;
+            top: 5px;
+        }
+
+        .grid-line {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .grid-line span {
+            font-size: 10px;
+            color: var(--text-muted);
+            width: 25px;
+        }
+
+        .grid-line .line {
+            flex: 1;
+            height: 1px;
+            background-color: #EAEAEA;
+        }
+
+        .bars-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 110px;
+            padding-left: 25px;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 5px;
+        }
+
+        .bar {
+            width: 24px;
+            background-color: #134074; /* Dark structural blue bar fills */
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+            transition: height 0.5s ease;
+        }
+
+        /* Exact graph height levels matching design profile */
+        .bar.mon { height: 75px; }
+        .bar.tue { height: 55px; }
+        .bar.wed { height: 95px; }
+        .bar.thu { height: 70px; }
+        .bar.fri { height: 85px; }
+        .bar.sat { height: 102px; }
+        .bar.sun { height: 85px; }
+
+        .days-labels {
+            display: flex;
+            justify-content: space-between;
+            padding-left: 25px;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .days-labels span {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Action Buttons Wrapper */
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+            cursor: pointer;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .btn:active {
+            opacity: 0.85;
+        }
+
+        .btn-danger {
+            background-color: var(--btn-danger);
+        }
+
+        .btn-teal {
+            background-color: var(--btn-teal);
+        }
+
+        /* Bottom Fixed Navigation Bar */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            background-color: #FFFFFF;
+            border-top: 1px solid #EAEAEA;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 12px;
+            z-index: 5;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-main);
+            font-size: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            color: var(--text-main);
+        }
+
+        .nav-item.active, .nav-item.active i {
+            color: #0B2545;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <!-- Structural Camera Hardware Cutout Element -->
+        <div class="phone-notch"></div>
+
+        <!-- Top Header Module -->
+        <header class="app-header">
+            <div class="brand-wrapper">
+                <div class="brand-logo"></div>
+                <h1 class="brand-name">AquaNet -Community App</h1>
+            </div>
+            <div class="header-actions">
+                <i class="fa-regular fa-user"></i>
+                <i class="fa-regular fa-bell"></i>
+            </div>
+        </header>
+
+        <!-- Dynamic User Screen Content Area -->
+        <main class="main-content">
+            <h2 class="neighborhood-title">Your Neighborhood (zone 4)</h2>
+
+            <!-- Metrics & Analytics Component -->
+            <div class="data-card">
+                <div class="status-row">
+                    <span class="status-label">Current Water Status:</span>
+                    <span class="status-badge">Active (until 9 pm)</span>
+                </div>
+                
+                <div class="metric-line">
+                    <span class="metric-label">Storage Level (Local Task):</span>
+                    <span class="metric-value">80%</span>
+                </div>
+                <div class="metric-line">
+                    <span class="metric-label">Today's Usage (Household):</span>
+                    <span class="metric-value">220 Liters</span>
+                </div>
+
+                <div class="chart-header-label">Daily Usage</div>
+
+                <!-- Custom Grid Graphics Container -->
+                <div class="bar-chart-container">
+                    <div class="chart-grid">
+                        <div class="grid-line"><span>200</span><div class="line"></div></div>
+                        <div class="grid-line"><span>150</span><div class="line"></div></div>
+                        <div class="grid-line"><span>100</span><div class="line"></div></div>
+                        <div class="grid-line"><span>50</span><div class="line"></div></div>
+                        <div class="grid-line"><span>0</span><div class="line"></div></div>
+                    </div>
+                    
+                    <div class="bars-wrapper">
+                        <div class="bar mon"></div>
+                        <div class="bar tue"></div>
+                        <div class="bar wed"></div>
+                        <div class="bar thu"></div>
+                        <div class="bar fri"></div>
+                        <div class="bar sat"></div>
+                        <div class="bar sun"></div>
+                    </div>
+
+                    <div class="days-labels">
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                        <span>Sun</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactivity Core CTA Triggers -->
+            <div class="action-group">
+                <button class="btn btn-danger">Report a leaks</button>
+                <button class="btn btn-teal">View Rationing Schedule</button>
+                <button class="btn btn-teal">View Rationing Schedule</button>
+            </div>
+        </main>
+
+        <!-- System Footer Navigation Grid -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Usage</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Map</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-regular fa-bell"></i>
+                <span>Alert</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-ellipsis"></i>
+                <span>More</span>
+            </a>
+        </nav>
+    </div>
+
+</body>
+</html>
